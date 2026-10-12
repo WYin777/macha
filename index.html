@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>原材料用量轉換</title>
+<style>
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+  body {
+    margin: 0;
+    min-height: 100vh;
+    font-family: -apple-system, "PingFang TC", "Microsoft JhengHei", sans-serif;
+    background: linear-gradient(160deg, #eef7ee 0%, #dcefdc 50%, #cfe8d5 100%);
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 32px 16px 48px;
+  }
+
+  .app {
+    width: 100%;
+    max-width: 420px;
+  }
+
+  /* ── 標題 ── */
+  .header {
+    text-align: center;
+    margin-bottom: 22px;
+  }
+  .header h1 {
+    margin: 0;
+    font-size: 24px;
+    color: #2e6b3e;
+    letter-spacing: 1px;
+  }
+  .header p {
+    margin: 6px 0 0;
+    font-size: 13px;
+    color: #7a9a82;
+  }
+
+  /* ── 卡片 ── */
+  .card {
+    background: #ffffff;
+    border-radius: 18px;
+    padding: 18px 18px 16px;
+    margin-bottom: 16px;
+    box-shadow: 0 4px 18px rgba(46, 107, 62, .08);
+    border: 1px solid rgba(74, 158, 92, .08);
+    transition: box-shadow .25s;
+  }
+  .card:focus-within {
+    box-shadow: 0 6px 22px rgba(46, 107, 62, .18);
+  }
+
+  .card-title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 17px;
+    font-weight: 700;
+    color: #2e6b3e;
+    margin-bottom: 4px;
+  }
+  .emoji { font-size: 20px; }
+
+  .formula {
+    font-size: 12px;
+    color: #9aae9f;
+    margin-bottom: 12px;
+    padding-left: 28px;
+  }
+
+  /* ── 輸入區 ── */
+  .input-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .input-wrap {
+    flex: 1;
+    position: relative;
+  }
+  .input-wrap input {
+    width: 100%;
+    padding: 13px 42px 13px 14px;
+    font-size: 18px;
+    font-weight: 600;
+    color: #2e3d31;
+    border: 2px solid #dcebdd;
+    border-radius: 12px;
+    outline: none;
+    background: #fafdfa;
+    transition: border-color .2s, background .2s;
+  }
+  .input-wrap input:focus {
+    border-color: #4a9e5c;
+    background: #fff;
+  }
+  .input-wrap input::placeholder {
+    color: #b8c9ba;
+    font-weight: 400;
+  }
+  .unit {
+    position: absolute;
+    right: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 14px;
+    color: #9aae9f;
+    pointer-events: none;
+  }
+
+  /* ── 結果 ── */
+  .result-box {
+    margin-top: 12px;
+    background: #f0f8f1;
+    border-radius: 12px;
+    padding: 12px 14px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    min-height: 50px;
+    transition: background .25s;
+  }
+  .result-box.active {
+    background: linear-gradient(135deg, #e5f5e8, #d5efdb);
+  }
+  .result-label {
+    font-size: 13px;
+    color: #7a9a82;
+  }
+  .result-value {
+    font-size: 22px;
+    font-weight: 800;
+    color: #2e6b3e;
+    letter-spacing: .5px;
+  }
+  .result-value .g-unit {
+    font-size: 14px;
+    font-weight: 600;
+    color: #6a9a76;
+    margin-left: 2px;
+  }
+
+  /* ── 隱藏 number 上下箭頭 ── */
+  input[type=number]::-webkit-outer-spin-button,
+  input[type=number]::-webkit-inner-spin-button {
+    -webkit-appearance: none; margin: 0;
+  }
+  input[type=number] { -moz-appearance: textfield; }
+
+  /* ── 頁尾 ── */
+  .footer {
+    text-align: center;
+    font-size: 11px;
+    color: #a8bfae;
+    margin-top: 8px;
+  }
+</style>
+</head>
+<body>
+  <div class="app">
+
+    <div class="header">
+      <h1>原材料用量轉換</h1>
+      <p>輸入 ml，自動換算成 g</p>
+    </div>
+
+    <!-- 茉莉茶 -->
+    <div class="card">
+      <div class="card-title"><span class="emoji">🌼</span>茉莉茶</div>
+      <div class="formula">ml × 31 ÷ 1100 = g</div>
+      <div class="input-row">
+        <div class="input-wrap">
+          <input type="number" inputmode="decimal" placeholder="輸入用量"
+                 data-factor="31/1100" oninput="calc(this)">
+          <span class="unit">ml</span>
+        </div>
+      </div>
+      <div class="result-box">
+        <span class="result-label">換算結果</span>
+        <span class="result-value">—</span>
+      </div>
+    </div>
+
+    <!-- 大紅袍 -->
+    <div class="card">
+      <div class="card-title"><span class="emoji">🍂</span>大紅袍</div>
+      <div class="formula">ml × 25 ÷ 675 = g</div>
+      <div class="input-row">
+        <div class="input-wrap">
+          <input type="number" inputmode="decimal" placeholder="輸入用量"
+                 data-factor="25/675" oninput="calc(this)">
+          <span class="unit">ml</span>
+        </div>
+      </div>
+      <div class="result-box">
+        <span class="result-label">換算結果</span>
+        <span class="result-value">—</span>
+      </div>
+    </div>
+
+    <!-- 抹茶粉 -->
+    <div class="card">
+      <div class="card-title"><span class="emoji">🍵</span>抹茶粉</div>
+      <div class="formula">ml × 22 ÷ 52 = g</div>
+      <div class="input-row">
+        <div class="input-wrap">
+          <input type="number" inputmode="decimal" placeholder="輸入用量"
+                 data-factor="22/52" oninput="calc(this)">
+          <span class="unit">ml</span>
+        </div>
+      </div>
+      <div class="result-box">
+        <span class="result-label">換算結果</span>
+        <span class="result-value">—</span>
+      </div>
+    </div>
+
+    <!-- 巧克力 -->
+    <div class="card">
+      <div class="card-title"><span class="emoji">🍫</span>巧克力</div>
+      <div class="formula">ml ÷ 2 = g</div>
+      <div class="input-row">
+        <div class="input-wrap">
+          <input type="number" inputmode="decimal" placeholder="輸入用量"
+                 data-factor="1/2" oninput="calc(this)">
+          <span class="unit">ml</span>
+        </div>
+      </div>
+      <div class="result-box">
+        <span class="result-label">換算結果</span>
+        <span class="result-value">—</span>
+      </div>
+    </div>
+
+    <div class="footer">輸入即時計算 · 結果四捨五入至小數後 2 位</div>
+
+  </div>
+
+  <script>
+    function calc(input) {
+      const card = input.closest('.card');
+      const resultBox = card.querySelector('.result-box');
+      const valueEl = card.querySelector('.result-value');
+
+      const val = parseFloat(input.value);
+
+      // 空值 → 顯示破折號
+      if (input.value.trim() === '' || isNaN(val)) {
+        valueEl.innerHTML = '—';
+        resultBox.classList.remove('active');
+        return;
+      }
+
+      // 計算：套用 data-factor（例如 31/1100）
+      const factor = eval(input.dataset.factor);
+      const g = (val * factor).toFixed(2);
+
+      valueEl.innerHTML = g + '<span class="g-unit">g</span>';
+      resultBox.classList.add('active');
+    }
+  </script>
+</body>
+</html>
